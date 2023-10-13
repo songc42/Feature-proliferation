@@ -1,4 +1,4 @@
-# Feature-proliferation
+# Feature Proliferation --- the ``Cancer'' in StyleGAN and its Treatments
 
 ![](https://github.com/songc42/Feature-proliferation/blob/main/Impact_feature_proliferation.png)
 
