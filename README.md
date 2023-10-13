@@ -13,6 +13,12 @@
 
 Requirements
 ==
+
+* 64-bit Python 3.8 and PyTorch 1.9.0 (or later). See [https://pytorch.org](https://pytorch.org) for PyTorch install instructions.
+* 
+
+
+
 code
 ----
 1
