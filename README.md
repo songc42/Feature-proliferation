@@ -6,6 +6,7 @@ environment
 ==
 code
 ----
+![](https://github.com/songc42/Feature-proliferation/edit/main/Impact_feature_proliferation.png)
 1
 dhsajkhdsajk `dsasad` `dsad ` sdadssafdsfgwds
 
