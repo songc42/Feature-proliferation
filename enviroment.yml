@@ -238,4 +238,4 @@ dependencies:
       - tqdm==4.62.3
       - urllib3==1.26.15
       - werkzeug==2.2.3
-prefix: /home/shuang/anaconda3/envs/ailab
+prefix: /home/shuang/anaconda3/envs/Feature_Proliferation
