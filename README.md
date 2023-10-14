@@ -3,7 +3,7 @@
 ![](https://github.com/songc42/Feature-proliferation/blob/main/Impact_feature_proliferation.png)
 
 This repository contains code for our ICCV 2023 paper "Feature Proliferation --- the ``Cancer'' in StyleGAN and its Treatments" <br>
-If you find our code or paper useful, please cite
+If you find our code or paper useful, please cite <br>
     `@inproceedings{song2023feature,
       title={Feature Proliferation--the" Cancer" in StyleGAN and its Treatments},
       author={Song, Shuang and Liang, Yuanbang and Wu, Jing and Lai, Yu-Kun and Qin, Yipeng},
