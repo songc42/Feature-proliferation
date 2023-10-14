@@ -18,7 +18,7 @@ Requirements
 *  CUDA toolkit 11.3 or later
 *  We recommand that you can simply create the enviroment using Anaconda:
    * `conda env create -f environment.yml`
- * `conda activate Feature_Proliferation`
+   * `conda activate Feature_Proliferation`
 
 
 
