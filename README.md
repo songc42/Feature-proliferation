@@ -17,7 +17,7 @@ Requirements
 *  Ubuntu 22.04.1，Python 3.7 and PyTorch 1.10.2 (or later). See [https://pytorch.org](https://pytorch.org) for PyTorch install instructions.
 *  CUDA toolkit 11.3 or later
 *  We recommand that you can simply create the enviroment using Anaconda:
- * `conda env create -f environment.yml`
+   * `conda env create -f environment.yml`
  * `conda activate Feature_Proliferation`
 
 
