@@ -5,8 +5,7 @@
 This repository contains code for our ICCV 2023 paper "Feature Proliferation --- the ``Cancer'' in StyleGAN and its Treatments" <br>
 If you find our code or paper useful, please cite <br>
 
-    @<font size=5 color=RED>inproceedings</font> 
-{song2023feature,  
+    @inproceedings{song2023feature,  
                  title={Feature Proliferation--the" Cancer" in StyleGAN and its Treatments},  
                  author={Song, Shuang and Liang, Yuanbang and Wu, Jing and Lai, Yu-Kun and Qin, Yipeng},  
                  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},  
