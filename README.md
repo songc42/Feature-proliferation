@@ -51,9 +51,7 @@ Pre-trained models
 |[Metface](https://drive.google.com/file/d/1z6IVVaCJuFTksKwp1CM3emWOVHbrBip-/view?usp=sharing) | StyleGAN2 model trained on Metface with 1024x1024 output resolution.
 
 
-[FFHQ](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=sharing)
-[AFHQ](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=drive_link)
-[Metface](https://drive.google.com/file/d/1-mkYHLi9UaU6L5VxTMY_3ihP6bNUhP-h/view?usp=sharing)
+
 
 Getting Started
 ----
