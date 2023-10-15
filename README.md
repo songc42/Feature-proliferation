@@ -9,6 +9,7 @@
 [![StyleGAN-XL + CLIP](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CasualGANPapers/unconditional-StyleGANXL-CLIP/blob/main/StyleganXL%2BCLIP.ipynb)
 
 This repository contains code for our ICCV 2023 paper "Feature Proliferation --- the ``Cancer'' in StyleGAN and its Treatments" <br>
+
 If you find our code or paper useful, please cite <br>
 ```bibtex
 @inproceedings{song2023feature,  
