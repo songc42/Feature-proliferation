@@ -62,4 +62,10 @@ python SG2_modify.py --outdir=out \
   --seed 79058 79325 78482 77963 \
   --dataset FFHQ 
 ```
+and
 
+```
+python SG2_modify.py --outdir=out \
+  --seed 78948 79565 78434 76977 \
+  --dataset AFHQ 
+```
