@@ -46,7 +46,7 @@ Pre-trained models
 
 | Dataset | Description
 | :--- | :----------
-|[FFHQ]([https://drive.google.com/file/d/1EM87UquaoQmk17Q8d5kYIAHqu0dkYqdT/view?usp=sharing](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=sharing)) | StyleGAN2 model trained on FFHQ with 1024x1024 output resolution.
+|[FFHQ](https://drive.google.com/file/d/1EM87UquaoQmk17Q8d5kYIAHqu0dkYqdT/view?usp=sharing) | StyleGAN2 model trained on FFHQ with 1024x1024 output resolution.
 |[AFHQ](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=drive_link) | StyleGAN2 model trained on AFHQ with 512x512 output resolution.
 |[Metface](https://drive.google.com/file/d/1z6IVVaCJuFTksKwp1CM3emWOVHbrBip-/view?usp=sharing) | StyleGAN2 model trained on Metface with 1024x1024 output resolution.
 
