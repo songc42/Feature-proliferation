@@ -58,9 +58,8 @@ Getting Started
 
 For a quick start, you can simply use the following command:
 ```
-python run_inversion.py --outdir=inversion_out \
-  --target media/jay.png \
-  --inv-steps 1000 --run-pti --pti-steps 350 \
-  --network=https://s3.eu-central-1.amazonaws.com/avg-projects/stylegan_xl/models/imagenet512.pkl
+python SG2_modify.py --outdir=out \
+  --seed 79058 79325 78482 77963 \
+  --dataset FFHQ 
 ```
 
