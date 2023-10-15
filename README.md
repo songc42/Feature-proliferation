@@ -56,4 +56,11 @@ Pre-trained models
 Getting Started
 ----
 
+For a quick start, you can simply use the following command:
+```
+python run_inversion.py --outdir=inversion_out \
+  --target media/jay.png \
+  --inv-steps 1000 --run-pti --pti-steps 350 \
+  --network=https://s3.eu-central-1.amazonaws.com/avg-projects/stylegan_xl/models/imagenet512.pkl
+```
 
