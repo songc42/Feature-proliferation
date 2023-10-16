@@ -669,7 +669,7 @@ class Generator(torch.nn.Module):
         self.num_ws = self.synthesis.num_ws
         self.mapping = MappingNetwork(z_dim=z_dim, c_dim=c_dim, w_dim=w_dim, num_ws=self.num_ws, **mapping_kwargs)
 
-    def forward(self, z, c, dataset,heat_display,truncation_psi=1,  truncation_cutoff=None, **synthesis_kwargs):
+    def forward(self, z, c, dataset,truncation_psi=1,  truncation_cutoff=None, **synthesis_kwargs):
         Key_all=load_variavle('Key_all.kpl')
         ws = self.mapping(z, c, truncation_psi=truncation_psi, truncation_cutoff=truncation_cutoff)
         #print(ws.shape)

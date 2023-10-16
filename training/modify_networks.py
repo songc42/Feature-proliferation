@@ -324,16 +324,7 @@ class ToRGBLayer(torch.nn.Module):
         x = bias_act.bias_act(x, self.bias.to(x.dtype), clamp=self.conv_clamp)
         return x
 
-#----------------------------------------------------------------------------
-def modify_micro(x,block_num,conv_0_1,dataset):
-    layer_all_top=load_variavle('layer_all_top.txt')
-    layer='b'+str(block_num)+'_conv'+str(conv_0_1)
-    top_dex=layer_all_top[layer]
-    modify_num=10
-    for i in range(modify_num):
-        x[0][top_dex[i]] = x[0][top_dex[i]] * 0
 
-    return x, 3
 def modify_conv(x,block_num,conv_0_1,dataset):
     modify_num_0 = 0
     conv0_1=['conv0_','conv1_']
@@ -353,13 +344,15 @@ def modify_conv(x,block_num,conv_0_1,dataset):
     minus = x_mean - torch.Tensor(m_all).to('cuda')
     ratio = minus / torch.Tensor(vari_all).to('cuda')
     modify_index = (minus.abs() > minus_threshold[block_num]) * (ratio.abs() > ratio_threshold[block_num])
-    print ('non-modify time is ',time_end-time_start)
+
     
     if sum(modify_index):
 
         modi_time_start=time.time()
         x[0][modify_index] = (x[0][modify_index].reshape(sum(modify_index), -1).t() / (
                     ratio[modify_index].abs() * cof)).t().reshape(sum(modify_index), len(x[0][0][0]), -1)
+                    
+        # Do statistics about number of modified feature maps
         modify_num_0 = sum(modify_index)
         modify_index_true = modify_index.nonzero()
         modi_time_end=time.time()
@@ -421,6 +414,7 @@ class SynthesisBlock(torch.nn.Module):
         
 
     def forward(self, x, img, ws, dataset,force_fp32=False, fused_modconv=None, **layer_kwargs):
+        Key_all=load_variavle('Key_all.kpl')
         auto_modify_style=False
         misc.assert_shape(ws, [None, self.num_conv + self.num_torgb, self.w_dim])
         w_iter = iter(ws.unbind(dim=1))
@@ -453,25 +447,27 @@ class SynthesisBlock(torch.nn.Module):
             x = self.conv0(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
             
             # -------------------------Feature curing Conv0---------------------------------------
-            modify_num_0 = 0
-            block_num = int(math.log(self.resolution, 2) - 2)
-            modify_index=load_variavle('FFHQ_modify_index.txt')
-            dic_name='b'+str(block_num)+'_conv0'
-            if modify_index[dic_name]:
-                x,modify_num_0=modify_conv(x,block_num,0,dataset)
-            b_modify_num += modify_num_0
-            
+            if Key_all['modify']:
+	        modify_num_0 = 0
+	        block_num = int(math.log(self.resolution, 2) - 2)
+	        modify_index=load_variavle('Modify_index.txt')
+	        dic_name='b'+str(block_num)+'_conv0'
+	        if modify_index[dic_name]:
+	            x,modify_num_0=modify_conv(x,block_num,0,dataset)
+	        b_modify_num += modify_num_0
+    
 	    #conv1 layer
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
             
 	# ---------------------Feature curing Conv1------------------------------------------
-        modify_num_1 = 0
-        block_num = int(math.log(self.resolution, 2) - 2)
-        modify_index = load_variavle('FFHQ_modify_index.txt')
-        dic_name = 'b' + str(block_num) + '_conv1'
-        if modify_index[dic_name]:
-	    x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
-        b_modify_num += modify_num_1
+	if Key_all['modify']:
+            modify_num_1 = 0
+            block_num = int(math.log(self.resolution, 2) - 2)
+            modify_index = load_variavle('Modify_index.txt')
+            dic_name = 'b' + str(block_num) + '_conv1'
+            if modify_index[dic_name]:
+	        x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
+            b_modify_num += modify_num_1
 
 
         
