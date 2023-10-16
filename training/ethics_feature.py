@@ -326,18 +326,16 @@ class ToRGBLayer(torch.nn.Module):
 #----------------------------record_variation---------------------------------
 def record_variation(x,block_num,conv_0_1,dataset):
     device='cuda'
-    modify_num_0 = 0
-    cof = 3.5
     conv0_1=['conv0_','conv1_']
-    #block_num = int(math.log(self.resolution, 2) - 2)
-    # 设置参数
+    modify_num_0 = 0
+    cof = 3.5   
+    # Load mean and std of each feature map
     m_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'m_b' + str(block_num) + '.txt'
     vari_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'vari_b' + str(block_num) + '.txt'
-
-    #载入均值和标准差
     m_all = load_variavle(m_name)
     vari_all = load_variavle(vari_name)
-    #计算偏移量
+    
+    # Measure its deviation from its distribution
     x_mean = x[0].mean([1, 2])
     minus = x_mean - torch.Tensor(m_all).to(device)
     ratio = minus / torch.Tensor(vari_all).to(device)
@@ -349,17 +347,20 @@ def record_variation(x,block_num,conv_0_1,dataset):
 def modify_conv(x,block_num,conv_0_1,dataset,dic_para,Key_all):#heat_display,modi_index_all):
     device='cuda'
     modify_num_0 = 0
-    cof = 3.5
     conv0_1=['conv0_','conv1_']
-    # 设置参数
+    
+    # Hyper-parameter setup 
+    cof = 2
+    minus_threshold = [0.01, 0.01, 0.01, 0.01, 0.01]
+    ratio_threshold = [2, 2, 2, 2, 2]
+    
+    # Load mean and std of each feature map
     m_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'m_b' + str(block_num) + '.txt'
     vari_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'vari_b' + str(block_num) + '.txt'
-    minus_threshold = [0.1, 0.1, 0.2, 0.2, 0.2]
-    ratio_threshold = [2, 2, 2, 2, 3]
-    #载入
     m_all = load_variavle(m_name)
     vari_all = load_variavle(vari_name)
-    #----------------------------计算并modify-------------------------------------------------------------
+    
+    #----------------------------Feature curing-------------------------------------------------------------
     x_mean = x[0].mean([1, 2])
     minus = x_mean - torch.Tensor(m_all).to(device)
     ratio = minus / torch.Tensor(vari_all).to(device)

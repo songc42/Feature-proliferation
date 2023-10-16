@@ -335,48 +335,35 @@ def modify_micro(x,block_num,conv_0_1,dataset):
 
     return x, 3
 def modify_conv(x,block_num,conv_0_1,dataset):
-    time_start=time.time()
     modify_num_0 = 0
-    cof = 3
-    #block_num = int(math.log(self.resolution, 2) - 2)
-    # 设置参数
-    if conv_0_1:
-        m_name = dataset+'_m_var/conv1_m_b' + str(block_num) + '.txt'
-        vari_name = dataset+'_m_var/conv1_vari_b' + str(block_num) + '.txt'
-        minus_threshold = [0.1, 0.2, 0.2, 0.2, 0.67]
-        ratio_threshold = [3, 3, 3, 3, 3]
-    else:
-        m_name = dataset+'_m_var/conv0_m_b' + str(block_num) + '.txt'
-        vari_name = dataset+'_m_var/conv0_vari_b' + str(block_num) + '.txt'
-        minus_threshold = [0, 0.2, 0.2, 0.1, 0.67]
-        ratio_threshold = [0, 3, 3,3, 2]
-    # print('block_num=',block_num)
-  #  if block_num > 0 and block_num < 5:
+    conv0_1=['conv0_','conv1_']
+    # Hyper-parameter setup 
+    cof = 2
+    minus_threshold = [0.01, 0.01, 0.01, 0.01, 0.01]
+    ratio_threshold = [2, 2, 2, 2, 2]
+    
+    # Load mean and std of each feature map
+    m_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'m_b' + str(block_num) + '.txt'
+    vari_name = dataset+'_m_var/'+conv0_1[conv_0_1]+'vari_b' + str(block_num) + '.txt'
     m_all = load_variavle(m_name)
     vari_all = load_variavle(vari_name)
+    
+    #----------------------------Feature curing-------------------------------------------------------------
     x_mean = x[0].mean([1, 2])
     minus = x_mean - torch.Tensor(m_all).to('cuda')
     ratio = minus / torch.Tensor(vari_all).to('cuda')
-    #minus = x_mean - torch.Tensor(m_all)
-    #ratio = minus / torch.Tensor(vari_all)
     modify_index = (minus.abs() > minus_threshold[block_num]) * (ratio.abs() > ratio_threshold[block_num])
-    time_end=time.time()
     print ('non-modify time is ',time_end-time_start)
+    
     if sum(modify_index):
-        # x[0][modify_index].reshape(sum(modify_index),-1).t()
+
         modi_time_start=time.time()
         x[0][modify_index] = (x[0][modify_index].reshape(sum(modify_index), -1).t() / (
                     ratio[modify_index].abs() * cof)).t().reshape(sum(modify_index), len(x[0][0][0]), -1)
         modify_num_0 = sum(modify_index)
         modify_index_true = modify_index.nonzero()
         modi_time_end=time.time()
-        print ('modify time is ',modi_time_end-modi_time_start)
-#         for i in range(len(modify_index_true)):
-#             # print(modify_index.nonzero())
-#             print('修改了block', block_num, 'conv', conv_0_1, '的第', modify_index_true[i].cpu().numpy(), 'mean()=',
-#                   round(float(x[0][modify_index_true[i]].mean()), 2), 'minus=',
-#                   round(float(minus[modify_index_true[i]]), 2), 'ratio=', round(float(ratio[modify_index_true[i]]), 2))
-        #print('block',block_num,'conv',conv_0_1,'modify',int(sum(modify_index)))
+
     return x,modify_num_0
 #----------------------------------------------------------------------------
 
@@ -452,7 +439,7 @@ class SynthesisBlock(torch.nn.Module):
             x = x.to(dtype=dtype, memory_format=memory_format)
 
         # Main layers.
-        #False True
+ 
         b_modify_num=0
         if self.in_channels == 0:
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
@@ -462,84 +449,31 @@ class SynthesisBlock(torch.nn.Module):
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, gain=np.sqrt(0.5), **layer_kwargs)
             x = y.add_(x)
         else:
-            #conv0 layer
+            # conv0 layer
             x = self.conv0(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
-            modify_conv0 = True
+            
+            # -------------------------Feature curing Conv0---------------------------------------
             modify_num_0 = 0
-            if modify_conv0:
-                block_num = int(math.log(self.resolution, 2) - 2)
-                modify_index=load_variavle('FFHQ_modify_index.txt')
-                dic_name='b'+str(block_num)+'_conv0'
-                if modify_index[dic_name]:
-                    x,modify_num_0=modify_conv(x,block_num,0,dataset)
-                    # if block_num<2:
-                    #     x, modify_num_0 = modify_micro(x, block_num, 0, dataset)
-            b_modify_num += modify_num_0
-            # # Modify conv0
-            # modify_conv0 = True
-            # if modify_conv0:
-            #   cof=3.5
-            #   block_num=int(math.log(self.resolution,2)-2)
-            #   m_name='conv0_m_b'+str(block_num)+'.txt'
-            #   vari_name='conv0_vari_b'+str(block_num)+'.txt'
-            #   #m_name='cat_b'+str(block_num)+'_conv0'+'.txt'
-            #   #vari_name='cat_var_b'+str(block_num)+'_conv0'+'.txt'
-            #   #设置参数
-            #   minus_threshold=[0, 0.3, 0.3, 0.3, 0.67]
-            #   ratio_threshold=[0, 2, 2, 2, 2]
-            #   #print('block_num=',block_num)
-            #   modify_num_0=0
-            #   if block_num>0 and block_num<5:
-            #     m_all=load_variavle(m_name)
-            #     vari_all=load_variavle(vari_name)
-            #     x_mean=x[0].mean([1,2])
-            #     minus=x_mean-torch.Tensor(m_all).to('cuda')
-            #     ratio=minus/torch.Tensor(vari_all).to('cuda')
-            #     modify_index=(minus.abs()>minus_threshold[block_num])*(ratio.abs()>ratio_threshold[block_num])
-            #     if sum(modify_index):
-            #     #x[0][modify_index].reshape(sum(modify_index),-1).t()
-            #       x[0][modify_index]=(x[0][modify_index].reshape(sum(modify_index),-1).t()/(ratio[modify_index].abs()*cof)).t().reshape(sum(modify_index),len(x[0][0][0]),-1)
-            #       modify_num_0=sum(modify_index)
-            #   b_modify_num += modify_num_0
-
-            x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
-
-        modify_conv1 = True
-        modify_num_1 = 0
-        if modify_conv1:
             block_num = int(math.log(self.resolution, 2) - 2)
-            modify_index = load_variavle('FFHQ_modify_index.txt')
-            dic_name = 'b' + str(block_num) + '_conv1'
+            modify_index=load_variavle('FFHQ_modify_index.txt')
+            dic_name='b'+str(block_num)+'_conv0'
             if modify_index[dic_name]:
-                x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
-                # if block_num < 2:
-                #     x, modify_num_1 = modify_micro(x, block_num, 1, dataset)
+                x,modify_num_0=modify_conv(x,block_num,0,dataset)
+            b_modify_num += modify_num_0
+            
+	    #conv1 layer
+            x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
+            
+	# ---------------------Feature curing Conv1------------------------------------------
+        modify_num_1 = 0
+        block_num = int(math.log(self.resolution, 2) - 2)
+        modify_index = load_variavle('FFHQ_modify_index.txt')
+        dic_name = 'b' + str(block_num) + '_conv1'
+        if modify_index[dic_name]:
+	    x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
         b_modify_num += modify_num_1
 
-        # #Modify conv1
-        # modify_conv1=True
-        # modify_num_1=0
-        # if modify_conv1:
-        #     cof = 3.5
-        #     block_n = int(math.log(self.resolution, 2) - 2)
-        #     m_name = 'conv1_m_b' + str(block_n) + '.txt'
-        #     vari_name = 'conv1_vari_b' + str(block_n) + '.txt'
-        #     minus_threshold = [0.3, 0.3, 0.3, 0.1, 0.67]
-        #     ratio_threshold = [2, 2, 2, 2.5, 3]
-        #     if block_n > -1 and block_n < 5:
-        #         m_all = load_variavle(m_name)
-        #         vari_all = load_variavle(vari_name)
-        #         x_mean = x[0].mean([1, 2])
-        #         minus = x_mean - torch.Tensor(m_all).to('cuda')
-        #         ratio = minus / torch.Tensor(vari_all).to('cuda')
-        #         modify_index = (minus.abs() > minus_threshold[block_n]) * (ratio.abs() > ratio_threshold[block_n])
-        #         if sum(modify_index):
-        #             x[0][modify_index] = (x[0][modify_index].reshape(sum(modify_index), -1).t() / (
-        #                         ratio[modify_index].abs() * cof)).t().reshape(sum(modify_index), len(x[0][0][0]),
-        #                                                                       -1)
-        #             modify_num_1 +=  sum(modify_index)
-        # b_modify_num += modify_num_1
-            
+
         
         # ToRGB.
         if img is not None:
@@ -563,6 +497,7 @@ def load_variavle(filename):
 def list_sqrt(var):
   for i in range(len(var)):
     var[i]=math.sqrt(var[i])
+    
 @persistence.persistent_class
 class SynthesisNetwork(torch.nn.Module):
     def __init__(self,
@@ -615,7 +550,6 @@ class SynthesisNetwork(torch.nn.Module):
         for res, cur_ws in zip(self.block_resolutions, block_ws):
             block = getattr(self, f'b{res}')
             x, img,b_modify_num = block(x, img, cur_ws,dataset, **block_kwargs)
-            #x_all.append(x)
             b_modify_num_all+=b_modify_num
         return img,x_all,b_modify_num_all
 
