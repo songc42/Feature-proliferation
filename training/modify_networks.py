@@ -448,26 +448,26 @@ class SynthesisBlock(torch.nn.Module):
             
             # -------------------------Feature curing Conv0---------------------------------------
             if Key_all['modify']:
-	        modify_num_0 = 0
-	        block_num = int(math.log(self.resolution, 2) - 2)
-	        modify_index=load_variavle('Modify_index.txt')
-	        dic_name='b'+str(block_num)+'_conv0'
-	        if modify_index[dic_name]:
-	            x,modify_num_0=modify_conv(x,block_num,0,dataset)
-	        b_modify_num += modify_num_0
+                  modify_num_0 = 0
+                  block_num = int(math.log(self.resolution, 2) - 2)
+                  modify_index=load_variavle('Modify_index.txt')
+                  dic_name='b'+str(block_num)+'_conv0'
+                  if modify_index[dic_name]:
+                      x,modify_num_0=modify_conv(x,block_num,0,dataset)
+              b_modify_num += modify_num_0
     
-	    #conv1 layer
+        #conv1 layer
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
             
-	# ---------------------Feature curing Conv1------------------------------------------
-	if Key_all['modify']:
-            modify_num_1 = 0
-            block_num = int(math.log(self.resolution, 2) - 2)
-            modify_index = load_variavle('Modify_index.txt')
-            dic_name = 'b' + str(block_num) + '_conv1'
-            if modify_index[dic_name]:
-	        x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
-            b_modify_num += modify_num_1
+    # ---------------------Feature curing Conv1------------------------------------------
+    if Key_all['modify']:
+        modify_num_1 = 0
+        block_num = int(math.log(self.resolution, 2) - 2)
+        modify_index = load_variavle('Modify_index.txt')
+        dic_name = 'b' + str(block_num) + '_conv1'
+        if modify_index[dic_name]:
+            x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
+        b_modify_num += modify_num_1
 
 
         

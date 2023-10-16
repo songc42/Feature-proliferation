@@ -69,13 +69,13 @@ def show_mul(x_1):
 def show_mul_rows(x_1,num_rows):
     num_cols = np.ceil(len(x_1)/num_rows)
     for j in range(num_cols):
-	    for i in range(num_rows):
-		img_feature_1 = x_1[i*num_cols+j]
-		modi_n = (img_feature_1.permute(0, 2, 3, 1) * 127.5 + 128).clamp(0, 255).to(torch.uint8)
-		plt.subplot(num_rows, num_cols, i*num_cols+j)
-		plt.imshow(modi_n[0].cpu().numpy())
-		plt.axis('off')
-	    plt.show()
+        for i in range(num_rows):
+            img_feature_1 = x_1[i*num_cols+j]
+            modi_n = (img_feature_1.permute(0, 2, 3, 1) * 127.5 + 128).clamp(0, 255).to(torch.uint8)
+            plt.subplot(num_rows, num_cols, i*num_cols+j)
+            plt.imshow(modi_n[0].cpu().numpy())
+            plt.axis('off')
+    plt.show()
 
 
 
