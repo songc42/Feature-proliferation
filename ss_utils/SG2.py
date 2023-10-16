@@ -1,7 +1,7 @@
 #
 print('Loading SG2 utilis,', end='')
 from ss_utils.shuang_utils import save_variable, load_variavle
-from ss_utils.SG_utils import *
+from ss_utils.SG_utils import model_select, compute_z
 
 import pickle
 import seaborn as sns
