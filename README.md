@@ -1,6 +1,6 @@
 # Feature Proliferation --- the ``Cancer'' in StyleGAN and its Treatments (ICCV 2023)
 
-Pre-trained model
+Pre-trained
 ==
 
 
