@@ -56,7 +56,7 @@ Getting Started
 
 For a quick start, 
 *  Step 1: [Download](#pre-trained-models) pretrained StyleGAN2 models to this repository.
-*  Step 2: Perform the following command using our picked seeds.
+*  Step 2: Perform the following command using our curated seeds.
 ```
 python SG2_modify.py --outdir=out \
   --seed 70383 \
