@@ -44,13 +44,16 @@ save_variable(Modify_index, 'Modify_index.txt')
 
 
 
-def SG2_Generation( Chosed_model, seed, operation='SG2', truncation_psi = 1,G_copy=None, **kwargs):
-
+def SG2_Generation( Chosed_model, seed, operation='SG2', truncation_psi = 1, G_copy=None, **kwargs):
+    device='cuda'
     # If modify, Project seed to Z
     z = compute_z(seed, device)
     Key_all = {}
-    if operation == 'modify_SG2':
+
+    if operation == 'SG2_modify':
         Key_all['modify'] = True
+    else:
+        Key_all['modify'] = False
     save_variable(Key_all, 'Key_all.kpl')
     
     # Load generator

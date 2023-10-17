@@ -17,9 +17,6 @@ def model_select(a, key):
         return 0
     z_dim = 512
     c_dim = 0
-    if dataset == 'CIFAR10':
-        print('CIFAR10')
-        c_dim = 0
     w_dim = 512
     img_channels = 3
     #Instantiate a generator
@@ -67,14 +64,16 @@ def show_mul(x_1):
     
 ###--------------------------------Show mulitiple imgs together---------------------------------###
 def show_mul_rows(x_1,num_rows):
-    num_cols = np.ceil(len(x_1)/num_rows)
-    for j in range(num_cols):
+    num_cols = int(np.ceil(len(x_1)/num_rows))
+    title=['SG2', 'Ours', 'Truncation {} = 0.7'.format(chr(966))]
+    for j in range(int(num_cols)):
         for i in range(num_rows):
-            img_feature_1 = x_1[i*num_cols+j]
+            img_feature_1 = x_1[int(i*num_cols+j)]
             modi_n = (img_feature_1.permute(0, 2, 3, 1) * 127.5 + 128).clamp(0, 255).to(torch.uint8)
-            plt.subplot(num_rows, num_cols, i*num_cols+j)
+            ax=plt.subplot(num_rows, num_cols, i*num_cols+j+1)
             plt.imshow(modi_n[0].cpu().numpy())
-            plt.axis('off')
+            ax.set_title(title[j])
+        plt.axis('off')
     plt.show()
 
 

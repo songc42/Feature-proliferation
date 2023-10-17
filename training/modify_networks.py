@@ -325,12 +325,12 @@ class ToRGBLayer(torch.nn.Module):
         return x
 
 
-def modify_conv(x,block_num,conv_0_1,dataset):
+def modify_conv(x, block_num, conv_0_1, dataset):
     modify_num_0 = 0
     conv0_1=['conv0_','conv1_']
     # Hyper-parameter setup 
     cof = 2
-    minus_threshold = [0.01, 0.01, 0.01, 0.01, 0.01]
+    minus_threshold = [0.1, 0.1, 0.1, 0.1, 0.1]
     ratio_threshold = [2, 2, 2, 2, 2]
     
     # Load mean and std of each feature map
@@ -362,6 +362,8 @@ def modify_conv(x,block_num,conv_0_1,dataset):
 
 @persistence.persistent_class
 class SynthesisBlock(torch.nn.Module):
+    global b_modify_num
+
     def __init__(self,
         in_channels,                        # Number of input channels, 0 = first block.
         out_channels,                       # Number of output channels.
@@ -433,7 +435,6 @@ class SynthesisBlock(torch.nn.Module):
             x = x.to(dtype=dtype, memory_format=memory_format)
 
         # Main layers.
- 
         b_modify_num=0
         if self.in_channels == 0:
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
@@ -454,20 +455,20 @@ class SynthesisBlock(torch.nn.Module):
                   dic_name='b'+str(block_num)+'_conv0'
                   if modify_index[dic_name]:
                       x,modify_num_0=modify_conv(x,block_num,0,dataset)
-              b_modify_num += modify_num_0
+                      b_modify_num += modify_num_0
     
         #conv1 layer
             x = self.conv1(x, next(w_iter), fused_modconv=fused_modconv, **layer_kwargs)
             
-    # ---------------------Feature curing Conv1------------------------------------------
-    if Key_all['modify']:
-        modify_num_1 = 0
-        block_num = int(math.log(self.resolution, 2) - 2)
-        modify_index = load_variavle('Modify_index.txt')
-        dic_name = 'b' + str(block_num) + '_conv1'
-        if modify_index[dic_name]:
-            x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
-        b_modify_num += modify_num_1
+        # ---------------------Feature curing Conv1------------------------------------------
+        if Key_all['modify']:
+            modify_num_1 = 0
+            block_num = int(math.log(self.resolution, 2) - 2)
+            modify_index = load_variavle('Modify_index.txt')
+            dic_name = 'b' + str(block_num) + '_conv1'
+            if modify_index[dic_name]:
+                x, modify_num_1 = modify_conv(x, block_num, 1,dataset)
+            b_modify_num += modify_num_1
 
 
         
@@ -482,7 +483,7 @@ class SynthesisBlock(torch.nn.Module):
 
         assert x.dtype == dtype
         assert img is None or img.dtype == torch.float32
-        return x, img,b_modify_num
+        return x, img, b_modify_num
 
 #----------------------------------------------------------------------------
 def load_variavle(filename):
@@ -490,9 +491,7 @@ def load_variavle(filename):
   r=pickle.load(f)
   f.close()
   return r
-def list_sqrt(var):
-  for i in range(len(var)):
-    var[i]=math.sqrt(var[i])
+
     
 @persistence.persistent_class
 class SynthesisNetwork(torch.nn.Module):
@@ -528,7 +527,7 @@ class SynthesisNetwork(torch.nn.Module):
                 self.num_ws += block.num_torgb
             setattr(self, f'b{res}', block)
 
-    def forward(self, ws,dataset,**block_kwargs):
+    def forward(self, ws, dataset, **block_kwargs):
         block_ws = []
         with torch.autograd.profiler.record_function('split_ws'):
             misc.assert_shape(ws, [None, self.num_ws, self.w_dim])
@@ -538,16 +537,13 @@ class SynthesisNetwork(torch.nn.Module):
                 block = getattr(self, f'b{res}')
                 block_ws.append(ws.narrow(1, w_idx, block.num_conv + block.num_torgb))
                 w_idx += block.num_conv
-        #True False
         x = img = None
-        str_mod='_'
-        x_all=[]
-        b_modify_num_all=0
+        b_modify_num_all = 0
         for res, cur_ws in zip(self.block_resolutions, block_ws):
             block = getattr(self, f'b{res}')
-            x, img,b_modify_num = block(x, img, cur_ws,dataset, **block_kwargs)
-            b_modify_num_all+=b_modify_num
-        return img,x_all,b_modify_num_all
+            x, img, b_modify_num = block(x, img, cur_ws, dataset, **block_kwargs)
+            b_modify_num_all += b_modify_num
+        return img, b_modify_num_all
 
 #----------------------------------------------------------------------------
 
@@ -574,7 +570,7 @@ class Generator(torch.nn.Module):
 
     def forward(self, z, c, dataset,truncation_psi=1, truncation_cutoff=None, **synthesis_kwargs):
         ws = self.mapping(z, c, truncation_psi=truncation_psi, truncation_cutoff=truncation_cutoff)
-        img,x_all,b_modify_num_all = self.synthesis(ws, dataset,**synthesis_kwargs)
+        img, b_modify_num_all = self.synthesis(ws, dataset,**synthesis_kwargs)
         return img,b_modify_num_all
 
 #----------------------------------------------------------------------------
