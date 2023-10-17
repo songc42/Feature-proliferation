@@ -55,7 +55,7 @@ Pre-trained models
 Getting Started
 ----
 
-For a quick start, you can [download](#pre-trainedmodels) pretrained StyleGAN2 models, and simply perform the following command:
+For a quick start, you can [download](#pre-trained models) pretrained StyleGAN2 models, and simply perform the following command:
 ```
 python SG2_modify.py --outdir=out \
   --seed 79058 79325 78482 77963 \
