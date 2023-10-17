@@ -49,7 +49,7 @@ Pre-trained models
 |[AFHQ](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=drive_link) | StyleGAN2 model trained on AFHQ with 512x512 output resolution.
 |[Metface](https://drive.google.com/file/d/1z6IVVaCJuFTksKwp1CM3emWOVHbrBip-/view?usp=sharing) | StyleGAN2 model trained on Metface with 1024x1024 output resolution.
 
-The estimated mean and standard deviation of feature maps in `FFHQ, AFHQ, Metface` pretrained models are stored in folders `FFHQ_m_var, AFHQ_m_var, and Metface_m_var`.
+The estimated mean and standard deviation of feature maps in `FFHQ, AFHQ, Metface` pretrained models are stored in folders `FFHQ_m_var`, `AFHQ_m_var`, and `Metface_m_var`.
 
 
 Getting Started
