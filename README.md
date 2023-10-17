@@ -40,9 +40,9 @@ Requirements
    * `conda env create -f environment.yml`
    * `conda activate Feature_Proliferation`
 
-Pre
+Pre-trained models
 ==
--trained models
+
 | Dataset | Description
 | :--- | :----------
 |[FFHQ](https://drive.google.com/file/d/1EM87UquaoQmk17Q8d5kYIAHqu0dkYqdT/view?usp=sharing) | StyleGAN2 model trained on FFHQ with 1024x1024 output resolution.
@@ -55,7 +55,7 @@ Pre
 Getting Started
 ----
 
-For a quick start, you can [download](#pre) pretrained StyleGAN2 models, and simply perform the following command:
+For a quick start, you can [download](#pre-trainedmodels) pretrained StyleGAN2 models, and simply perform the following command:
 ```
 python SG2_modify.py --outdir=out \
   --seed 79058 79325 78482 77963 \
