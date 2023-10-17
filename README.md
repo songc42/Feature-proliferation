@@ -40,22 +40,22 @@ Requirements
    * `conda env create -f environment.yml`
    * `conda activate Feature_Proliferation`
 
-Pre-trained models
+Pre
 ==
-
+-trained models
 | Dataset | Description
 | :--- | :----------
 |[FFHQ](https://drive.google.com/file/d/1EM87UquaoQmk17Q8d5kYIAHqu0dkYqdT/view?usp=sharing) | StyleGAN2 model trained on FFHQ with 1024x1024 output resolution.
 |[AFHQ](https://drive.google.com/file/d/17OU6C76FIol3ggdGXGUBwjhF3hGSF9V4/view?usp=drive_link) | StyleGAN2 model trained on AFHQ with 512x512 output resolution.
 |[Metface](https://drive.google.com/file/d/1z6IVVaCJuFTksKwp1CM3emWOVHbrBip-/view?usp=sharing) | StyleGAN2 model trained on Metface with 1024x1024 output resolution.
 
-*The estimated mean and standard deviation of feature maps in `FFHQ, AFHQ, Metface` pretrained models are stored in folders `FFHQ_m_var`, `AFHQ_m_var`, and `Metface_m_var`.
+* The estimated mean and standard deviation of feature maps of pretrained models on `FFHQ, AFHQ, Metface` datasets are stored in folders [`FFHQ_m_var`](./FFHQ_m_var), [`AFHQ_m_var`](./AFHQ_m_var), and [`Metface_m_var`]((./Metface_m_var)).
 
 
 Getting Started
 ----
 
-For a quick start, you can simply use the following command:
+For a quick start, you can [download](#requirements) pretrained StyleGAN2 models, and simply perform the following command:
 ```
 python SG2_modify.py --outdir=out \
   --seed 79058 79325 78482 77963 \
