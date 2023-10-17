@@ -63,7 +63,7 @@ def show_mul(x_1):
     plt.show()
     
 ###--------------------------------Show mulitiple imgs together---------------------------------###
-def show_mul_rows(x_1,num_rows):
+def show_mul_rows(x_1,num_rows,save_name=False):
     num_cols = int(np.ceil(len(x_1)/num_rows))
     title=['SG2', 'Ours', 'Truncation {} = 0.7'.format(chr(966))]
     for j in range(int(num_cols)):
@@ -74,8 +74,10 @@ def show_mul_rows(x_1,num_rows):
             plt.imshow(modi_n[0].cpu().numpy())
             ax.set_title(title[j])
         plt.axis('off')
+    if save_name:
+        plt.savefig(save_name)
     plt.show()
-
+    return
 
 
 # print('    Complete!!!')
