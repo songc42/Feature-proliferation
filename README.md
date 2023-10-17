@@ -59,13 +59,13 @@ For a quick start,
 *  Step 2: Perform the following command using our picked seeds.
 ```
 python SG2_modify.py --outdir=out \
-  --seed 79058 79325 78482 77963 \
+  --seed 70383 \
   --dataset FFHQ 
 ```
 and
 
 ```
 python SG2_modify.py --outdir=out \
-  --seed 78948 79565 78434 76977 \
+  --seed 77675 \
   --dataset AFHQ 
 ```
