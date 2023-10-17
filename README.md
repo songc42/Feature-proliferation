@@ -56,13 +56,13 @@ Getting Started
 
 For a quick start, 
 *  Step 1: [Download](#pre-trained-models) pretrained StyleGAN2 models to this repository.
-*  Step 2: Perform the following command using our curated seeds.
+*  Step 2: Perform the following command using our curated seeds:70383, 70033, 79614, 70223, 70344, 79773, 79828, 79058, 3341009, 70153.
 ```
 python SG2_modify.py --outdir=out \
   --seed 70383 \
   --dataset FFHQ 
 ```
-and
+For other dataset, e.g. AFHQ, perform the command below
 
 ```
 python SG2_modify.py --outdir=out \
