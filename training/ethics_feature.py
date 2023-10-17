@@ -630,12 +630,6 @@ class SynthesisNetwork(torch.nn.Module):
                 w_idx += block.num_conv
         #True False
         x = img = None
-        str_mod='_'
-#         x_all=[]
-#         _all=0
-#         modi_index_all={}
-#         ratio_all={}
-#         x_modi_yet=[]
         for res, cur_ws in zip(self.block_resolutions, block_ws):
             block = getattr(self, f'b{res}')
             x, img,block_dic_para= block(x, img, cur_ws,dataset,block_dic_para,Key_all,**block_kwargs)#b_modify_num,modi_index_all,x_all,x_modi_yet
