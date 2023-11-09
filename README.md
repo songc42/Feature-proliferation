@@ -11,7 +11,7 @@
 
 [[Paper]](https://openaccess.thecvf.com/content/ICCV2023/html/Song_Feature_Proliferation_--_the_Cancer_in_StyleGAN_and_its_Treatments_ICCV_2023_paper.html) | 
 [[Archiv]](https://arxiv.org/abs/2310.08921) | 
-[[Video]](https://openaccess.thecvf.com/content/ICCV2023/html/Song_Feature_Proliferation_--_the_Cancer_in_StyleGAN_and_its_Treatments_ICCV_2023_paper.html) |
+[[Video]](https://youtu.be/aXiGRakMu3k) |
 [![StyleGAN-XL + CLIP](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1JT0xkkn-pyNb-Nt13Zj8AXZueOjs1_3P?usp=sharing)
 
 If you find our code or paper useful, please cite 
